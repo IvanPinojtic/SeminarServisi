@@ -1,0 +1,78 @@
+﻿
+<button type="button" onclick="load()">Get</button>
+
+<table id="table" class="table">
+    <thead>
+        <tr>
+            <th>
+                AddressId
+            </th>
+            <th>
+                City
+            </th>
+            <th>
+                Street
+            </th>
+            <th>
+                Number
+            </th>
+            <th>
+                Country
+            </th>
+            <th>
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<div>
+    <a asp-area="" asp-controller="Home" asp-action="CreateAddress">Create</a>
+</div>
+
+<script>
+    function load() {
+        jQuery('#table > tbody').empty();
+        jQuery.ajax({
+            url: "/api/Addresses",
+            type: "GET",
+            contentType: "application/json",
+            success: function (addresses) {
+                for (var i in addresses) {
+                    var address = addresses[i];
+                    var address_row = jQuery('<tr></tr>');
+                    address_row.append('<td>' + address.id + '</td>');
+                    address_row.append('<td>' + address.city + '</td>');
+                    address_row.append('<td>' + address.street + '</td>');
+                    address_row.append('<td>' + address.number + '</td>');
+                    address_row.append('<td>' + address.country + '</td>');
+                    address_row.append('<td><button class="btn bnt-info" onclick="edit(jQuery(this));">Edit</button><input type="hidden" value="' + address.id + '" /></td>');
+                    address_row.append('<td><button class="btn bnt-info" onclick="deleteAddress(jQuery(this));">Delete</button><input type="hidden" value="' + address.id + '" /></td>');
+                    jQuery('#table > tbody').append(address_row);
+                }
+            },
+            error: function (err) {
+                console.error('Greska kod spajanja na servis!');
+            }
+        });
+    }
+
+    function deleteAddress(addressId) {
+
+        var id = addressId.next().val();
+        jQuery.ajax({
+            url: "/api/Addresses/" + id,
+            type: "DELETE",
+            contentType: "application/json",
+            success: function (restaurant) {
+                load();
+            },
+            error: function (err) {
+                console.error('Greska kod spajanja na servis!');
+            }
+        });
+    }
+
+</script>

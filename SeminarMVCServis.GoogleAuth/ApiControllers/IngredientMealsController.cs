@@ -49,7 +49,7 @@ namespace SeminarMVCServis.GoogleAuth.Controllers
             return Ok(ingredientMeal);
         }
 
-        [HttpGet("GetIngredientMealByMealId/{n:int?}")]
+        [HttpGet("GetIngredientMealsByMealId/{n:int?}")]
         public IActionResult GetIngredientMealsByMealId(int n)
         {
             if (!ModelState.IsValid)
