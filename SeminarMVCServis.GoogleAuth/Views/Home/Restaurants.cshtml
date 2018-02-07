@@ -1,0 +1,124 @@
+﻿
+<button type="button" onclick="load()">Get</button>
+
+<table id="table" class="table">
+    <thead>
+        <tr>
+            <th>
+                RestaurantId
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                City
+            </th>
+            <th>
+                Street
+            </th>
+            <th>
+                Number
+            </th>
+            <th>
+                Country
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<div id="restaurant"></div>
+
+<table id="table-menu" class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Price
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+
+<table id="table-guests" class="table">
+    <thead>
+        <tr>
+            <th>
+                FirstName
+            </th>
+            <th>
+                LastName
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+    function load() {
+        jQuery('#table > tbody').empty();
+        jQuery.ajax({
+            url: "/api/Restaurants",
+            type: "GET",
+            contentType: "application/json",
+            success: function (restaurants) {
+                for (var i in restaurants) {
+                    var restaurant = restaurants[i];
+                    var restaurant_row = jQuery('<tr></tr>');
+                    restaurant_row.append('<td>' + restaurant.id + '</td>');
+                    restaurant_row.append('<td>' + restaurant.name + '</td>');
+                    restaurant_row.append('<td>' + restaurant.address.city + '</td>');
+                    restaurant_row.append('<td>' + restaurant.address.street + '</td>');
+                    restaurant_row.append('<td>' + restaurant.address.number + '</td>');
+                    restaurant_row.append('<td>' + restaurant.address.country + '</td>');
+                    restaurant_row.append('<td><button class="btn bnt-info" onclick="showMenu(jQuery(this));">Show menu and guests</button><input type="hidden" value="' + restaurant.id + '" /></td>');
+                    jQuery('#table > tbody').append(restaurant_row);
+                }
+            },
+            error: function (err) {
+                console.error('Greska kod spajanja na servis!');
+            }
+        });
+    }
+
+    function showMenu(restaurantId) {
+        jQuery('#table-menu > tbody').empty();
+        jQuery('#table-guests > tbody').empty();
+        jQuery('#restaurant').empty();
+        var id = restaurantId.next().val();
+        jQuery.ajax({
+            url: "/api/Restaurants/" + id,
+            type: "GET",
+            contentType: "application/json",
+            success: function (restaurant) {
+                for (var i in restaurant.meals) {
+                    var meal = restaurant.meals[i];
+                    var meal_row = jQuery('<tr></tr>');
+                    meal_row.append('<td>' + meal.name + '</td>');
+                    meal_row.append('<td>' + meal.price + 'kn</td>');
+                    jQuery('#table-menu > tbody').append(meal_row);
+                }
+
+                for (var i in restaurant.guests) {
+                    var guest = restaurant.guests[i];
+                    var guest_row = jQuery('<tr></tr>');
+                    guest_row.append('<td>' + guest.firstName + '</td>');
+                    guest_row.append('<td>' + guest.lastName + '</td>');
+                    jQuery('#table-guests > tbody').append(guest_row);
+                }
+
+                jQuery('#restaurant').append("<b>Restaurant:</b> " + restaurant.name);
+            },
+            error: function (err) {
+                console.error('Greska kod spajanja na servis!');
+            }
+        });
+    }
+
+</script>

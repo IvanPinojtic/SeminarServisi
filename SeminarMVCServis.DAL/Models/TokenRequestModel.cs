@@ -8,5 +8,6 @@ namespace SeminarMVCServis.DAL.Models
     {
         public string UserName { get; set; }
         public int UserPIN { get; set; }
+        public string UserStringId { get; set; }
     }
 }

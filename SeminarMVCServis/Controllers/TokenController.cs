@@ -15,11 +15,11 @@ namespace SeminarMVCServis.Controllers
     [Route("api/Token")]
     public class TokenController : Controller
     {
-        private readonly SeminarContext _context;
+        private readonly RestaurantsContext _context;
 
         public IConfiguration Configuration { get; set; }
 
-        public TokenController(IConfiguration configuration, SeminarContext context)
+        public TokenController(IConfiguration configuration, RestaurantsContext context)
         {
             Configuration = configuration;
             _context = context;
@@ -28,7 +28,7 @@ namespace SeminarMVCServis.Controllers
         [HttpPost("RequestToken")]
         public IActionResult RequestToken([FromBody] TokenRequestModel tokenRequest)
         {
-            if (_context.User.Any(c => c.UserName == tokenRequest.UserName && c.UserPIN==tokenRequest.UserPIN))
+            if (_context.Users.Any(c => c.UserName == tokenRequest.UserName && c.UserPIN==tokenRequest.UserPIN))
             {
                 JwtSecurityToken token = JwsTokenCreator.CreateToken(tokenRequest.UserName,
             Configuration["Auth:JwtSecurityKey"],

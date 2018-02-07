@@ -1,0 +1,126 @@
+﻿<button type="button" onclick="load()">Get Token</button>
+
+<input type="text" id="name" placeholder="name" />
+<input type="text" id="pass" placeholder="pass" />
+
+<div id="token">
+
+</div>
+<br>
+
+<button type="button" onclick="loadGuests()">Get guests</button>
+
+<table id="guests-table" class="table">
+    <thead>
+        <tr>
+            <th>
+                GuestId
+            </th>
+            <th>
+                RestaurantId
+            </th>
+            <th>
+                FirstName
+            </th>
+            <th>
+                LastName
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+    function load() {
+        var name = $('#name').val();
+        var pin = $('#pass').val();
+
+        var userData = { userName: name, userPIN: pin };
+        $.ajax({
+            url: "/api/Token/RequestToken",
+            type: "POST",
+            contentType: "application/json",
+            headers: {
+                'api-version': '1.0'
+            },
+            data: JSON.stringify(userData),
+            success: function (response) {
+                $('#token').html(response);
+            },
+            error: function (err) {
+                $('#token').html(err.responseText.substring(1, err.responseText.length - 1));
+            }
+        });
+    }
+
+    function loadGuests() {
+        var name = $('#name').val();
+        var pin = $('#pass').val();
+
+        var token = "";
+
+        var userData = { userName: name, userPIN: pin };
+        $.ajax({
+            url: "/api/Token/RequestToken",
+            type: "POST",
+            contentType: "application/json",
+            headers: {
+                'api-version': '1.0'
+            },
+            data: JSON.stringify(userData),
+            error: function (response) {
+                $('#token').html(response);
+            },
+            success: function (response) {
+
+                token = "Bearer " + response.substring(1, response.length - 1);
+                $.ajax({
+                    url: "/api/Guests",
+                    type: "GET",
+                    contentType: "application/json",
+                    headers: {
+                        "Authorization": token
+                    },
+                    success: function (guests) {
+                        for (var i in guests) {
+                            var guest = guests[i];
+                            var guest_row = $('<tr></tr>');
+                            guest_row.append('<td>' + guest.id + '</td>');
+                            guest_row.append('<td>' + guest.restaurantId + '</td>');
+                            guest_row.append('<td>' + guest.firstName + '</td>');
+                            guest_row.append('<td>' + guest.lastName + '</td>');
+                            $('#guests-table > tbody').append(guest_row);
+                        }
+                    },
+                    error: function (err) {
+                        $('#token').html("error");
+                    }
+                });
+            }
+        });
+    }
+        /*jQuery.ajax({
+            url: "/api/Guests",
+            type: "GET",
+            contentType: "application/json",
+            headers: {
+                "Authorization": "Bearer " + tToken
+            },
+            ssuccess: function (guests) {
+                for (var i in guests) {
+                    var guest = guests[i];
+                    var guest_row = jQuery('<tr></tr>');
+                    guest_row.append('<td>' + guest.id + '</td>');
+                    guest_row.append('<td>' + guest.restaurantId + '</td>');
+                    guest_row.append('<td>' + guest.firstName + '</td>');
+                    guest_row.append('<td>' + guest.lastName + '</td>');
+                    guest_row.append('<td><button class="btn bnt-info" onclick="showDetails(jQuery(this));">Show details</button><input type="hidden" value="' + guest.id + '" /></td>');
+                    jQuery('#guests-table > tbody').append(guest_row);
+                }
+            },
+            error: function (err) {
+                console.error('Greska kod spajanja na servis!');
+            }
+        });
+    }*/
+</script>

@@ -6,302 +6,317 @@ namespace SeminarMVCServis.DAL.Models
 {
     public static class Seeder
     {
-        public static void SeedInitial(this SeminarContext seminarContext)
+        public static void SeedInitial(this RestaurantsContext restaurantsContext)
         {
-            if (!seminarContext.User.Any())
+            if (!restaurantsContext.Users.Any())
             {
-                SeedUsers(seminarContext);
+                SeedUsers(restaurantsContext);
 
-                SeedRestorans(seminarContext);
+                SeedRestaurants(restaurantsContext);
 
-                SeedSastojci(seminarContext);
+                SeedSastojci(restaurantsContext);
 
-                SeedJelo(seminarContext);
+                SeedMeal(restaurantsContext);
             }
         }
 
-        private static void SeedJelo(SeminarContext seminarContext)
+        private static void SeedMeal(RestaurantsContext restaurantsContext)
         {
-            var g1 = seminarContext.Gost.FirstOrDefault(g => g.Ime.Equals("Joža"));
-            var g2 = seminarContext.Gost.FirstOrDefault(g => g.Ime.Equals("Stipe"));
-            var g3 = seminarContext.Gost.FirstOrDefault(g => g.Ime.Equals("Bila"));
+            var g1 = restaurantsContext.Guests.FirstOrDefault(g => g.FirstName.Equals("Joža"));
+            var g2 = restaurantsContext.Guests.FirstOrDefault(g => g.FirstName.Equals("Stipe"));
+            var g3 = restaurantsContext.Guests.FirstOrDefault(g => g.FirstName.Equals("Bila"));
 
-            var g4 = seminarContext.Gost.FirstOrDefault(g => g.Ime.Equals("Ima"));
-            var g5 = seminarContext.Gost.FirstOrDefault(g => g.Ime.Equals("Mehmet"));
+            var g4 = restaurantsContext.Guests.FirstOrDefault(g => g.FirstName.Equals("Ima"));
+            var g5 = restaurantsContext.Guests.FirstOrDefault(g => g.FirstName.Equals("Mehmet"));
 
-            var riba = seminarContext.Jelo.FirstOrDefault(j => j.Naziv.Equals("Riba"));
-            var grah = seminarContext.Jelo.FirstOrDefault(j => j.Naziv.Equals("Grah"));
-            var juhaPonistra = seminarContext.Jelo.FirstOrDefault(j => j.Naziv.Equals("Juha od ponistre"));
-            var burek = seminarContext.Jelo.FirstOrDefault(j => j.Naziv.Equals("Burek"));
-            var juhaMrkva = seminarContext.Jelo.FirstOrDefault(j => j.Naziv.Equals("Juha od mrkve"));
+            var riba = restaurantsContext.Meals.FirstOrDefault(j => j.Name.Equals("Riba"));
+            var grah = restaurantsContext.Meals.FirstOrDefault(j => j.Name.Equals("Grah"));
+            var juhaPonistra = restaurantsContext.Meals.FirstOrDefault(j => j.Name.Equals("Juha od ponistre"));
+            var burek = restaurantsContext.Meals.FirstOrDefault(j => j.Name.Equals("Burek"));
+            var juhaMrkva = restaurantsContext.Meals.FirstOrDefault(j => j.Name.Equals("Juha od mrkve"));
 
-            seminarContext.GostJelo.AddRange(new List<GostJelo>
+            restaurantsContext.GuestMeals.AddRange(new List<GuestMeal>
             {
-                new GostJelo
+                new GuestMeal
                 {
-                    Gost=g1,
-                    Jelo=grah
+                    Guest=g1,
+                    Meal=grah
                 },
-                new GostJelo
+                new GuestMeal
                 {
-                    Gost=g2,
-                    Jelo=grah
+                    Guest=g2,
+                    Meal=grah
                 },
-                new GostJelo
+                new GuestMeal
                 {
-                    Gost=g2,
-                    Jelo=burek
+                    Guest=g2,
+                    Meal=burek
                 },
-                new GostJelo
+                new GuestMeal
                 {
-                    Gost=g3,
-                    Jelo=juhaMrkva
+                    Guest=g3,
+                    Meal=juhaMrkva
                 },
-                new GostJelo
+                new GuestMeal
                 {
-                    Gost=g4,
-                    Jelo=riba
+                    Guest=g4,
+                    Meal=riba
                 },
-                new GostJelo
+                new GuestMeal
                 {
-                    Gost=g5,
-                    Jelo=juhaPonistra
+                    Guest=g5,
+                    Meal=juhaPonistra
                 }
             });
 
-            seminarContext.SaveChanges();
+            restaurantsContext.SaveChanges();
         }
 
-        private static void SeedRestorans(SeminarContext seminarContext)
+        private static void SeedRestaurants(RestaurantsContext restaurantsContext)
         {
-            var restoran1 = new Restoran
+            var Restaurant1 = new Restaurant
             {
-                Adresa = new Adresa
+                Address = new Address
                 {
-                    Mjesto = "Zagreb",
-                    Ulica = "Ilica",
-                    Broj = "23",
-                    Drzava = "Hrvatska"
+                    City = "Zagreb",
+                    Street = "Ilica",
+                    Number = "23",
+                    Country = "Hrvatska"
                 },
-                Naziv = "Kod Bozanića",
-                Gosti = new List<Gost>
+                Name = "Kod Bozanića",
+                Guests = new List<Guest>
                 {
-                    new Gost
+                    new Guest
                     {
-                        Ime="Joža",
-                        Prezime="Koža"
+                        FirstName="Joža",
+                        LastName="Koža"
                     },
-                    new Gost
+                    new Guest
                     {
-                        Ime="Stipe",
-                        Prezime="Klipe"
+                        FirstName="Stipe",
+                        LastName="Klipe"
                     },
-                    new Gost
+                    new Guest
                     {
-                        Ime="Bila",
-                        Prezime="Nebila"
+                        FirstName="Bila",
+                        LastName="Nebila"
                     }
                 },
-                Menu = new List<Jelo>
+                Meals = new List<Meal>
                 {
-                    new Jelo
+                    new Meal
                     {
-                        Naziv="Juha od mrkve",
-                        Cijena=66
+                        Name="Juha od mrkve",
+                        Price=66
                     },
-                    new Jelo
+                    new Meal
                     {
-                        Naziv="Grah",
-                        Cijena=13
+                        Name="Grah",
+                        Price=13
                     },
-                    new Jelo
+                    new Meal
                     {
-                        Naziv="Burek",
-                        Cijena=7
+                        Name="Burek",
+                        Price=7
                     },
                 }
             };
 
-            var restoran2 = new Restoran
+            var Restaurant2 = new Restaurant
             {
-                Adresa = new Adresa
+                Address = new Address
                 {
-                    Mjesto = "Split",
-                    Ulica = "Zelena",
-                    Broj = "14",
-                    Drzava = "Hrvatska"
+                    City = "Split",
+                    Street = "Zelena",
+                    Number = "14",
+                    Country = "Hrvatska"
                 },
-                Naziv = "Ae2",
-                Gosti = new List<Gost>
+                Name = "Ae2",
+                Guests = new List<Guest>
                 {
-                    new Gost
+                    new Guest
                     {
-                        Ime="Ima",
-                        Prezime="Nema"
+                        FirstName="Ima",
+                        LastName="Nema"
                     },
-                    new Gost
+                    new Guest
                     {
-                        Ime="Mehmet",
-                        Prezime="Mujkić"
+                        FirstName="Mehmet",
+                        LastName="Mujkić"
                     }
                 },
-                Menu = new List<Jelo>
+                Meals = new List<Meal>
                 {
-                    new Jelo
+                    new Meal
                     {
-                        Naziv="Juha od ponistre",
-                        Cijena=12
+                        Name="Juha od ponistre",
+                        Price=12
                     },
-                    new Jelo
+                    new Meal
                     {
-                        Naziv="Riba",
-                        Cijena=500
+                        Name="Riba",
+                        Price=500
                     }
                 }
             };
 
-            seminarContext.Restoran.Add(restoran1);
-            seminarContext.Restoran.Add(restoran2);
+            restaurantsContext.Restaurants.Add(Restaurant1);
+            restaurantsContext.Restaurants.Add(Restaurant2);
 
-            seminarContext.SaveChanges();
+            restaurantsContext.SaveChanges();
 
         }
 
-        private static void SeedSastojci(SeminarContext seminarContext)
+        private static void SeedSastojci(RestaurantsContext restaurantsContext)
         {
-            var riba = seminarContext.Jelo.FirstOrDefault(j => j.Naziv.Equals("Riba"));
-            var grah = seminarContext.Jelo.FirstOrDefault(j => j.Naziv.Equals("Grah"));
-            var juhaPonistra = seminarContext.Jelo.FirstOrDefault(j => j.Naziv.Equals("Juha od ponistre"));
-            var burek= seminarContext.Jelo.FirstOrDefault(j => j.Naziv.Equals("Burek"));
-            var juhaMrkva= seminarContext.Jelo.FirstOrDefault(j => j.Naziv.Equals("Juha od mrkve"));
+            var riba = restaurantsContext.Meals.FirstOrDefault(j => j.Name.Equals("Riba"));
+            var grah = restaurantsContext.Meals.FirstOrDefault(j => j.Name.Equals("Grah"));
+            var juhaPonistra = restaurantsContext.Meals.FirstOrDefault(j => j.Name.Equals("Juha od ponistre"));
+            var burek= restaurantsContext.Meals.FirstOrDefault(j => j.Name.Equals("Burek"));
+            var juhaMrkva= restaurantsContext.Meals.FirstOrDefault(j => j.Name.Equals("Juha od mrkve"));
 
-            var sol = new Sastojak
+            var sol = new Ingredient
             {
-                Naziv = "Sol",
-                Jedinica = "mg"
+                Name = "Sol",
+                Unit = "mg"
             };
-            var srdela = new Sastojak
+            var srdela = new Ingredient
             {
-                Naziv = "Srdela",
-                Jedinica = "kg"
+                Name = "Srdela",
+                Unit = "kg"
             };
-            var voda = new Sastojak
+            var voda = new Ingredient
             {
-                Naziv = "Voda",
-                Jedinica = "L"
+                Name = "Voda",
+                Unit = "L"
             };
-            var ponistra = new Sastojak
+            var ponistra = new Ingredient
             {
-                Naziv = "Ponistra",
-                Jedinica = "prstohvat"
+                Name = "Ponistra",
+                Unit = "prstohvat"
             };
-            var mahune = new Sastojak
+            var mahune = new Ingredient
             {
-                Naziv = "Mahune",
-                Jedinica = "komad"
+                Name = "Mahune",
+                Unit = "komad"
             };
-            var sir = new Sastojak
+            var sir = new Ingredient
             {
-                Naziv = "Sir",
-                Jedinica = "kg"
+                Name = "Sir",
+                Unit = "kg"
             };
-            var mrkva = new Sastojak
+            var mrkva = new Ingredient
             {
-                Naziv = "Mrkva",
-                Jedinica = "kg"
+                Name = "Mrkva",
+                Unit = "kg"
             };
 
-            /*    seminarContext.Sastojak.Add(sol);
-                seminarContext.Sastojak.Add(srdela);
-                seminarContext.Sastojak.Add(voda);
+            /*    RestaurantsContext.Sastojak.Add(sol);
+                RestaurantsContext.Sastojak.Add(srdela);
+                RestaurantsContext.Sastojak.Add(voda);
 
-                seminarContext.SaveChanges();*/
+                RestaurantsContext.SaveChanges();*/
 
-            seminarContext.SastojakJelo.AddRange(new List<SastojakJelo>
+            restaurantsContext.IngredientMeals.AddRange(new List<IngredientMeal>
             {
-                new SastojakJelo
+                new IngredientMeal
                 {
-                    Jelo=riba,
-                    Sastojak=sol
+                    Meal=riba,
+                    Ingredient=sol,
+                    Quantity=20
                 },
-                new SastojakJelo
+                new IngredientMeal
                 {
-                    Jelo=riba,
-                    Sastojak=srdela
+                    Meal=riba,
+                    Ingredient=srdela,
+                    Quantity=1
                 },
-                new SastojakJelo
+                new IngredientMeal
                 {
-                    Jelo=riba,
-                    Sastojak=voda
+                    Meal=riba,
+                    Ingredient=voda,
+                    Quantity=60
                 }
-                ,new SastojakJelo
+                ,new IngredientMeal
                 {
-                    Jelo=grah,
-                    Sastojak=sol
-                },new SastojakJelo
-                {
-                    Jelo=grah,
-                    Sastojak=mahune
+                    Meal=grah,
+                    Ingredient=sol,
+                    Quantity=7
                 },
-                new SastojakJelo
+                new IngredientMeal
                 {
-                    Jelo=grah,
-                    Sastojak=voda
+                    Meal=grah,
+                    Ingredient=mahune,
+                    Quantity=2
                 },
-                new SastojakJelo
+                new IngredientMeal
                 {
-                    Jelo=juhaPonistra,
-                    Sastojak=ponistra
+                    Meal=grah,
+                    Ingredient=voda,
+                    Quantity=1
                 },
-                new SastojakJelo
+                new IngredientMeal
                 {
-                    Jelo=burek,
-                    Sastojak=sir
+                    Meal=juhaPonistra,
+                    Ingredient=ponistra,
+                    Quantity=12
                 },
-                new SastojakJelo
+                new IngredientMeal
                 {
-                    Jelo=juhaMrkva,
-                    Sastojak=mrkva
+                    Meal=burek,
+                    Ingredient=sir,
+                    Quantity=50
                 },
-                new SastojakJelo
+                new IngredientMeal
                 {
-                    Jelo=juhaMrkva,
-                    Sastojak=voda
+                    Meal=juhaMrkva,
+                    Ingredient=mrkva,
+                    Quantity=88
+                },
+                new IngredientMeal
+                {
+                    Meal=juhaMrkva,
+                    Ingredient=voda,
+                    Quantity=2
                 }
             });
 
-            seminarContext.SaveChanges();
+            restaurantsContext.SaveChanges();
         }
 
-        private static void SeedUsers(SeminarContext seminarContext)
+        private static void SeedUsers(RestaurantsContext restaurantsContext)
         {
             var users = new List<User>
             {
                 new User
                 {
                     UserName = "user1",
-                    UserPIN = 1111
+                    UserPIN = 1111,
+                    ApsUserId = "jedan"
                 },
                 new User
                 {
                     UserName = "user2",
-                    UserPIN = 2222
+                    UserPIN = 2222,
+                    ApsUserId = "dva"
                 },
                 new User
                 {
                     UserName = "user3",
-                    UserPIN = 3333
+                    UserPIN = 3333,
+                    ApsUserId = "tri"
                 },
                 new User
                 {
                     UserName = "user4",
-                    UserPIN = 4444
+                    UserPIN = 4444,
+                    ApsUserId = "cetiri"
                 }
             };
 
-            seminarContext.User.AddRange(users);
+            restaurantsContext.Users.AddRange(users);
 
-            seminarContext.SaveChanges();
+            restaurantsContext.SaveChanges();
         }
     }
 }

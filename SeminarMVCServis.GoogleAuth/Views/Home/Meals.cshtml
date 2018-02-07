@@ -1,0 +1,103 @@
+﻿
+<button type="button" onclick="load()">Get</button>
+
+<table id="table" class="table">
+    <thead>
+        <tr>
+            <th>
+                Meald
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<div id="meal">
+
+</div>
+
+<div id="restaurant">
+
+</div>
+
+<table id="table-ingredients" class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Unit
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+    function load() {
+        jQuery('#table > tbody').empty();
+        jQuery.ajax({
+            url: "/api/Meals",
+            type: "GET",
+            contentType: "application/json",
+            success: function (meals) {
+                for (var i in meals) {
+                    var meal = meals[i];
+                    var meal_row = jQuery('<tr></tr>');
+                    meal_row.append('<td>' + meal.id + '</td>');
+                    meal_row.append('<td>' + meal.name + '</td>');
+                    meal_row.append('<td>' + meal.price + 'kn</td>');
+                    meal_row.append('<td><button class="btn bnt-info" onclick="showIngredients(jQuery(this));">Show ingredients</button><input type="hidden" value="' + meal.id + '" /></td>');
+                    jQuery('#table > tbody').append(meal_row);
+                }
+            },
+            error: function (err) {
+                console.error('Greska kod spajanja na servis!');
+            }
+        });
+    }
+
+    function showIngredients(guestId) {
+        jQuery('#meal').empty();
+        jQuery('#restaurant').empty();
+        jQuery('#table-ingredients > tbody').empty();
+        var id = guestId.next().val();
+        jQuery.ajax({
+            url: "/api/IngredientMeals/GetIngredientMealsByMealId/" + id,
+            type: 'GET',
+            contentType: 'application/json',
+            success: function (ingredientMeals) {
+
+                for (var i in ingredientMeals) {
+                    var ingredientMeal = ingredientMeals[i];
+                    var ingredientMeal_row = jQuery('<tr></tr>');
+                    ingredientMeal_row.append('<td>' + ingredientMeal.ingredient.name + '</td>');
+                    ingredientMeal_row.append('<td>' + ingredientMeal.quantity + '</td>');
+                    ingredientMeal_row.append('<td>' + ingredientMeal.ingredient.unit + '</td>');
+                    jQuery('#table-ingredients > tbody').append(ingredientMeal_row);
+                }
+
+                jQuery('#meal').append("<b>Meal:</b> " + ingredientMeals[0].meal.name);
+                jQuery('#restaurant').append("<b>Restaurant:</b> " + ingredientMeals[0].meal.restaurant.name);
+            },
+            error: function (err) {
+                console.error('Greska kod spajanja na servis!');
+            }
+        });
+    }
+
+</script>

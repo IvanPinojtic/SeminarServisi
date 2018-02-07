@@ -1,0 +1,52 @@
+﻿
+<button type="button" onclick="load()">Get</button>
+
+<table id="table" class="table">
+    <thead>
+        <tr>
+            <th>
+                GuestId
+            </th>
+            <th>
+                RestaurantId
+            </th>
+            <th>
+                FirstName
+            </th>
+            <th>
+                LastName
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+    function load() {
+
+        jQuery.ajax({
+            url: "/api/Guests",
+            type: "GET",
+            contentType: "application/json",
+            success: function (guests) {
+                for (var i in guests) {
+                    var guest = guests[i];
+                    var guest_row = jQuery('<tr></tr>');
+                    guest_row.append('<td>' + guest.id + '</td>');
+                    guest_row.append('<td>' + guest.restaurantId + '</td>');
+                    guest_row.append('<td>' + guest.firstName + '</td>');
+                    guest_row.append('<td>' + guest.lastName + '</td>');
+                    guest_row.append('<td>' + guest.lastName + '</td>');
+                    jQuery('#table > tbody').append(guest_row);
+                }
+            },
+            error: function (err) {
+                console.error('Greska kod spajanja na servis!');
+            }
+        });
+    }
+
+</script>

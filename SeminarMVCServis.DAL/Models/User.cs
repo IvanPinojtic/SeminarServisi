@@ -9,6 +9,7 @@ namespace SeminarMVCServis.DAL.Models
     {
         [Key]
         public int Id { get; set; }
+        public string ApsUserId { get; set; }
         public string UserName { get; set; }
         public int UserPIN { get; set; }
     }

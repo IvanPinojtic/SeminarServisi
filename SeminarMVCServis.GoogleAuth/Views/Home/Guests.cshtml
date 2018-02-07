@@ -1,0 +1,110 @@
+﻿
+<button type="button" onclick="load()">Get</button>
+
+<table id="table" class="table">
+    <thead>
+        <tr>
+            <th>
+                GuestId
+            </th>
+            <th>
+                RestaurantId
+            </th>
+            <th>
+                FirstName
+            </th>
+            <th>
+                LastName
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<div id="guest">
+
+</div>
+<div id="total">
+
+</div>
+<div id="restaurant">
+
+</div>
+
+<table id="table-meals" class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Price
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+
+
+<script>
+    function load() {
+        jQuery('#table > tbody').empty();
+        jQuery.ajax({
+            url: "/api/Guests",
+            type: "GET",
+            contentType: "application/json",
+            success: function (guests) {
+                for (var i in guests) {
+                    var guest = guests[i];
+                    var guest_row = jQuery('<tr></tr>');
+                    guest_row.append('<td>' + guest.id + '</td>');
+                    guest_row.append('<td>' + guest.restaurantId + '</td>');
+                    guest_row.append('<td>' + guest.firstName + '</td>');
+                    guest_row.append('<td>' + guest.lastName + '</td>');
+                    guest_row.append('<td><button class="btn bnt-info" onclick="showMeals(jQuery(this));">Show meals</button><input type="hidden" value="' + guest.id + '" /></td>');
+                    jQuery('#table > tbody').append(guest_row);
+                }
+            },
+            error: function (err) {
+                console.error('Greska kod spajanja na servis!');
+            }
+        });
+    }
+
+    function showMeals(guestId) {
+        jQuery('#table-meals > tbody').empty();
+        var id = guestId.next().val();
+        jQuery.ajax({
+            url: "/api/GuestMeals/GetGuestMealsByGuestId/" + id,
+            type: 'GET',
+            contentType: 'application/json',
+            success: function (guestMeals) {
+                var guest = guestMeals[0].guest.firstName + " " + guestMeals[0].guest.lastName;
+                var total = 0;
+                for (var i in guestMeals) {
+                    var meal = guestMeals[i];
+                    var meal_row = jQuery('<tr></tr>');
+                    meal_row.append('<td>' + meal.meal.name + '</td>');
+                    meal_row.append('<td>' + meal.meal.price + 'kn</td>');
+                    jQuery('#table-meals > tbody').append(meal_row);
+                    total += meal.meal.price;
+                }
+
+                jQuery('#restaurant').empty();
+                jQuery('#guest').empty();
+                jQuery('#total').empty();
+                jQuery('#guest').append("<b>Guest:</b> " + guest);
+                jQuery('#total').append("<b>Total:</b> " + total + "kn");
+                jQuery('#restaurant').append("<b>Restaurant:</b> " + guestMeals[0].guest.restaurant.name);
+            },
+            error: function (err) {
+                console.error('Greska kod spajanja na servis!');
+            }
+        });
+    }
+
+</script>

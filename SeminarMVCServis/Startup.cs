@@ -49,7 +49,7 @@ namespace SeminarMVCServis
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
 
-            services.AddDbContext<SeminarContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DatabaseConnection")));
+            services.AddDbContext<RestaurantsContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DatabaseConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,7 +77,7 @@ namespace SeminarMVCServis
 
             using(var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                scope.ServiceProvider.GetService<SeminarContext>().SeedInitial();
+                scope.ServiceProvider.GetService<RestaurantsContext>().SeedInitial();
             }
         }
     }
